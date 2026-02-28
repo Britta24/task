@@ -87,7 +87,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # ✅ LANGUAGE & TIME
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'   # ✅ since you are in India
+TIME_ZONE = 'Asia/Kolkata'  
 USE_I18N = True
 USE_TZ = True
 
