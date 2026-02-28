@@ -22,7 +22,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 # ✅ APPLICATIONS
 INSTALLED_APPS = [
-    'student_community.accounts',
+    'accounts',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,10 +31,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'student_community.students',
-    'student_community.companies',
-    'student_community.internships',
-    'student_community.applications',
+    'students',
+    'companies',
+    'internships',
+    'applications',
 ]
 
 
