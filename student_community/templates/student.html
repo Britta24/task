@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Student Dashboard</h1>
+    <a href="{% url 'logout' %}" class="btn">Logout</a>
+  </div>
+
+  <!-- 🔹 PROFILE -->
+  <h3>Profile</h3>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <input name="name" value="{{ profile.name }}" placeholder="Name" required>
+    <input name="college" value="{{ profile.college }}" placeholder="College">
+    <input name="course" value="{{ profile.course }}" placeholder="Course / Department">
+    <input name="contact" value="{{ profile.contact }}" placeholder="Contact Number">
+    <input name="skills" value="{{ profile.skills }}" placeholder="Skills">
+
+    <input type="file" name="resume">
+
+    {% if profile.resume %}
+      <p>
+        Current Resume:
+        <a href="{{ profile.resume.url }}" target="_blank">View</a>
+      </p>
+    {% endif %}
+
+    <button type="submit" name="save_profile" class="btn">
+      Save Profile
+    </button>
+  </form>
+
+  <hr>
+
+  <!-- 🔹 INTERNSHIPS -->
+  <h3>Available Internships</h3>
+
+  {% for i in internships %}
+
+    <div class="card">
+
+  <h4>{{ i.title }}</h4>
+
+  <p><b>Company:</b> {{ i.company.name }}</p>
+  <p><b>Industry:</b> {{ i.company.industry }}</p>
+  <p><b>Location:</b> {{ i.company.location }}</p>
+  <p><b>Contact:</b> {{ i.company.contact }}</p>
+  <p><b>About:</b> {{ i.company.about }}</p>
+  <p><b>Deadline:</b> {{ i.deadline }}</p>
+
+  {% if i.id in applied_ids %}
+      <button class="btn" disabled>Applied</button>
+  {% else %}
+      <form method="POST" action="{% url 'apply_internship' i.id %}">
+          {% csrf_token %}
+          <button class="btn">Apply</button>
+      </form>
+  {% endif %}
+
+</div>
+
+  {% empty %}
+    <p>No internships available</p>
+  {% endfor %}
+
+  <hr>
+
+  <!-- 🔹 MY APPLICATIONS -->
+  <h3>My Applications</h3>
+
+  {% for a in applications %}
+
+    <div class="card">
+      <b>{{ a.internship.title }}</b>
+      <p>Company: {{ a.internship.company.name }}</p>
+      <p>Status: <b>{{ a.status }}</b></p>
+    </div>
+
+  {% empty %}
+    <p>No applications yet</p>
+  {% endfor %}
+
+</div>
+
+</body>
+</html>

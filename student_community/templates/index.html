@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Community</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="container center">
+
+  <h1>Student Community Web Application</h1>
+
+  <div class="role-wrapper">
+
+    <div class="role-card">
+      <h2>Student</h2>
+
+      <div class="btn-group">
+        <a class="btn" href="{% url 'login' %}?role=student">Login</a>
+        <a class="btn outline" href="{% url 'register' %}?role=student">Register</a>
+      </div>
+    </div>
+
+   
+    <div class="role-card">
+      <h2>Company</h2>
+
+      <div class="btn-group">
+        <a class="btn" href="{% url 'login' %}?role=company">Login</a>
+        <a class="btn outline" href="{% url 'register' %}?role=company">Register</a>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Company Dashboard</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>Company Dashboard</h1>
+    <a href="{% url 'logout' %}" class="btn">Logout</a>
+  </div>
+
+
+  <h3>Company Profile</h3>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+
+      <input name="name" value="{{ profile.name }}" placeholder="Company Name" required>
+      <input name="industry" value="{{ profile.industry }}" placeholder="Industry">
+      <input name="location" value="{{ profile.location }}" placeholder="Location">
+      <input name="contact" value="{{ profile.contact }}" placeholder="Contact Number">
+      <textarea name="about" placeholder="About Company">{{ profile.about }}</textarea>
+
+      <button type="submit" name="save_profile" class="btn">
+        Save Profile
+      </button>
+
+    </div>
+  </form>
+
+  <hr>
+
+  <h3>Post Internship</h3>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group-inline">
+      <input name="title" placeholder="Internship Title" required>
+      <input type="date" name="deadline" required>
+
+      <button type="submit" name="post_internship" class="btn">
+        Post
+      </button>
+    </div>
+
+  </form>
+
+  <hr>
+
+  
+  <h3>My Internships</h3>
+
+  {% for i in profile.internship_set.all %}
+    <div class="card">
+      <b>{{ i.title }}</b>
+      <p>Deadline: {{ i.deadline }}</p>
+    </div>
+  {% empty %}
+    <p>No internships posted yet</p>
+  {% endfor %}
+
+  <hr>
+
+
+  <h3>Applications Received</h3>
+
+  {% for a in applications %}
+
+    <div class="card">
+
+      <h4>{{ a.internship.title }}</h4>
+
+      <p><b>Student:</b> {{ a.student.name|default:"Not provided" }}</p>
+      <p><b>College:</b> {{ a.student.college|default:"-" }}</p>
+      <p><b>Course:</b> {{ a.student.course|default:"-" }}</p>
+      <p><b>Contact:</b> {{ a.student.contact|default:"-" }}</p>
+      <p><b>Skills:</b> {{ a.student.skills|default:"-" }}</p>
+
+      {% if a.student.resume %}
+        <p>
+          <a href="{{ a.student.resume.url }}" target="_blank" class="btn outline">
+            View Resume
+          </a>
+        </p>
+      {% else %}
+        <p>No resume uploaded</p>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="app_id" value="{{ a.id }}">
+
+        <div class="form-group-inline">
+
+          <select name="status">
+
+            <option value="Applied" {% if a.status == "Applied" %}selected{% endif %}>Applied</option>
+            <option value="Shortlisted" {% if a.status == "Shortlisted" %}selected{% endif %}>Shortlisted</option>
+            <option value="Rejected" {% if a.status == "Rejected" %}selected{% endif %}>Rejected</option>
+            <option value="Selected" {% if a.status == "Selected" %}selected{% endif %}>Selected</option>
+
+          </select>
+
+          <button type="submit" name="update_status" class="btn">
+            Update
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  {% empty %}
+
+    <p>No applications yet</p>
+
+  {% endfor %}
+
+</div>
+
+</body>
+</html>
