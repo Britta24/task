@@ -2,22 +2,28 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY
+# 🔐 SECURITY
 SECRET_KEY = 'django-insecure-a1a+yz*hty@_5x8q)0qzhd6#%ny(g4k1k5s9yh3&w655i=sxt^'
-DEBUG = True
-ALLOWED_HOSTS = []
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['*']
+
 
 # ✅ CUSTOM USER MODEL
 AUTH_USER_MODEL = 'accounts.User'
+
 
 # ✅ LOGIN / LOGOUT REDIRECT
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
 LOGOUT_REDIRECT_URL = '/login/'
 
+
 # ✅ APPLICATIONS
 INSTALLED_APPS = [
-    'accounts',
+    'student_community.accounts',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,17 +31,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # your apps
-    
-    'students',
-    'companies',
-    'internships',
-    'applications',
+    'student_community.students',
+    'student_community.companies',
+    'student_community.internships',
+    'student_community.applications',
 ]
+
 
 # ✅ MIDDLEWARE
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+    # WhiteNoise (must be just after security)
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -44,14 +53,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'student_community.urls'
+
 
 # ✅ TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
 
-        # global templates folder
         'DIRS': [BASE_DIR / 'templates'],
 
         'APP_DIRS': True,
@@ -67,15 +77,19 @@ TEMPLATES = [
     },
 ]
 
+
+# ✅ WSGI
 WSGI_APPLICATION = 'student_community.wsgi.application'
 
-# ✅ DATABASE
+
+# ✅ DATABASE (Render will still work with SQLite for now)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 
 # ✅ PASSWORD VALIDATION
 AUTH_PASSWORD_VALIDATORS = [
@@ -85,11 +99,13 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# ✅ LANGUAGE & TIME
+
+# 🌍 LANGUAGE & TIME
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Kolkata'  
+TIME_ZONE = 'Asia/Kolkata'
 USE_I18N = True
 USE_TZ = True
+
 
 # ✅ STATIC FILES
 STATIC_URL = '/static/'
@@ -98,11 +114,15 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-STATIC_ROOT = BASE_DIR / "staticfiles"   # for deployment (safe to keep)
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # ✅ MEDIA FILES (resume upload)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 # ✅ DEFAULT PRIMARY KEY
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
